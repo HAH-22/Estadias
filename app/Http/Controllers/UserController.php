@@ -9,10 +9,30 @@ use App\Models\Plan;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
-        return view('admin.users.index', compact('users'));
+        $search = $request->input('search');
+
+        $users = User::query()
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%")
+                        ->orWhere('email', 'LIKE', "%{$search}%")
+                        ->orWhereHas('plan', function ($planQuery) use ($search) {
+                        $planQuery->where('name', 'LIKE', "%{$search}%");
+            });
+
+            });
+                // Búsqueda por rol (admin/usuario)
+                if (strtolower($search) === 'admin') {
+                    $query->orWhere('is_admin', true);
+                } elseif (strtolower($search) === 'usuario') {
+                    $query->orWhere('is_admin', false);
+                }
+            })
+            ->get();
+
+        return view('admin.users.index', compact('users', 'search'));
     }
 
     public function create()

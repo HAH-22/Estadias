@@ -19,6 +19,24 @@
             </a>
         </div>
 
+        <!-- Buscador -->
+        <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+            <form method="GET" action="{{ route('admin.users.index') }}" class="d-flex flex-grow-1 gap-2" style="max-width: 700px;">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Buscar por nombre, email, plan o rol..." class="form-control" style="border-radius: 50px; padding: 12px 24px; width: 100%; font-size: 1.05rem; border: 2px solid #ced4da; transition: all 0.3s;">
+                <button type="submit" class="btn" style="background-color: #1a3a6b; color: white; border-radius: 50px; padding: 12px 28px; font-size: 1rem; white-space: nowrap;">
+                    <i class="bi bi-search me-1"></i> Buscar
+                </button>
+                @if(request('search'))
+                    <a href="{{ route('admin.users.index') }}" class="btn" style="background-color: #6c757d; color: white; border-radius: 50px; padding: 12px 28px; font-size: 1rem; white-space: nowrap;">
+                        <i class="bi bi-x-circle me-1"></i> Limpiar
+                    </a>
+                @endif
+            </form>
+            <div class="text-muted" style="color: #5a6b7c; white-space: nowrap; font-size: 0.95rem;">
+                Mostrando <strong style="color: #1a3a6b;">{{ $users->count() }}</strong> usuarios
+            </div>
+        </div>
+
         <!-- Mensajes de éxito -->
         @if(session('success'))
             <div class="alert alert-success" style="background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 12px 20px; border-radius: 8px; margin-bottom: 1rem;">
@@ -50,7 +68,6 @@
                                     <td style="padding: 10px 6px; font-weight: 600;">{{ $user->id }}</td>
                                     <td style="padding: 10px 6px;">
                                         <div class="d-flex align-items-center justify-content-center">
-                                            <!-- ===== FOTO DE PERFIL REAL ===== -->
                                             @if($user->profile_photo)
                                                 <img src="{{ asset('storage/' . $user->profile_photo) }}" 
                                                      alt="Foto de perfil" 
@@ -109,10 +126,22 @@
                                 <tr>
                                     <td colspan="8" class="text-center py-5">
                                         <i class="bi bi-people" style="font-size: 3rem; color: #ccc;"></i>
-                                        <p class="text-muted mt-3" style="color: #5a6b7c;">No hay usuarios registrados todavía.</p>
-                                        <a href="{{ route('admin.users.create') }}" class="btn" style="background-color: #1a3a6b; color: white; padding: 10px 25px; border-radius: 50px; text-decoration: none; transition: 0.3s; font-weight: 500; box-shadow: 0 4px 12px rgba(26, 58, 107, 0.2);">
-                                            <i class="bi bi-plus-circle me-1"></i> Crear primer usuario
-                                        </a>
+                                        <p class="text-muted mt-3" style="color: #5a6b7c;">
+                                            @if(request('search'))
+                                                No se encontraron usuarios que coincidan con "<strong>{{ request('search') }}</strong>".
+                                            @else
+                                                No hay usuarios registrados todavía.
+                                            @endif
+                                        </p>
+                                        @if(request('search'))
+                                            <a href="{{ route('admin.users.index') }}" class="btn" style="background-color: #1a3a6b; color: white; padding: 10px 25px; border-radius: 50px; text-decoration: none; transition: 0.3s; font-weight: 500; box-shadow: 0 4px 12px rgba(26, 58, 107, 0.2);">
+                                                <i class="bi bi-arrow-left me-1"></i> Ver todos
+                                            </a>
+                                        @else
+                                            <a href="{{ route('admin.users.create') }}" class="btn" style="background-color: #1a3a6b; color: white; padding: 10px 25px; border-radius: 50px; text-decoration: none; transition: 0.3s; font-weight: 500; box-shadow: 0 4px 12px rgba(26, 58, 107, 0.2);">
+                                                <i class="bi bi-plus-circle me-1"></i> Crear primer usuario
+                                            </a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforelse
