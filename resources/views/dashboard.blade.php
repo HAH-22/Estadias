@@ -22,7 +22,7 @@
                     @endif
                     <div>
                         <h3 class="text-xl font-bold text-gray-800">¡Bienvenido, {{ Auth::user()->name }}!</h3>
-                        <p class="mt-1 text-gray-600">Desde aquí puedes gestionar el contenido del gimnasio.</p>
+                        <p class="mt-1 text-gray-600">Desde aquí puedes ver el contenido del gimnasio.</p>
                         <p class="text-sm text-gray-500">
                             <i class="bi bi-envelope me-1 text-blue-500"></i> {{ Auth::user()->email }}
                         </p>
