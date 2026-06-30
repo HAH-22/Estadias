@@ -16,6 +16,12 @@
 /public/build
 /public/hot
 /vendor
+/storage
+/tests
+/.editorconfig
+/public/storage
+.env
+/node_modules
 Homestead.json
 Homestead.yaml
 Thumbs.db
